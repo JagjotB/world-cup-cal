@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/admin/refresh-fixtures",
+      "schedule": "0 * * * *"
+    }
+  ]
+}
