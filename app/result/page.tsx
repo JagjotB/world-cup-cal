@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { headers } from "next/headers";
 import { ResultClient } from "@/app/result/result-client";
 import { getAppBaseUrl, isGoogleConfigured } from "@/lib/utils";
 import type { SelectionInput } from "@/lib/types";
@@ -7,6 +8,7 @@ type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
 export default async function ResultPage({ searchParams }: { searchParams: SearchParams }) {
   const params = await searchParams;
+  const requestHeaders = await headers();
   const method = typeof params.method === "string" ? params.method : "feed";
   const selection: SelectionInput = {
     mode: (typeof params.mode === "string" ? params.mode : "all") as SelectionInput["mode"],
@@ -26,7 +28,7 @@ export default async function ResultPage({ searchParams }: { searchParams: Searc
           {method === "ics" ? "Your calendar file is ready." : method === "google" ? "Google Calendar insert" : "Your calendar feed is ready."}
         </h1>
       </div>
-      <ResultClient method={method} selection={selection} appBaseUrl={getAppBaseUrl()} googleConfigured={isGoogleConfigured()} />
+      <ResultClient method={method} selection={selection} appBaseUrl={getAppBaseUrl(requestHeaders)} googleConfigured={isGoogleConfigured()} />
       <Link href="/select?mode=teams" className="w-fit rounded-full border border-white/15 px-5 py-2.5 text-sm font-semibold hover:border-gold/50 hover:text-gold">
         Add more matches
       </Link>

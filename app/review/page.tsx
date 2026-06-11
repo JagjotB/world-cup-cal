@@ -1,5 +1,6 @@
 import { ReviewClient } from "@/app/review/review-client";
 import { MatchCard } from "@/components/MatchCard";
+import { headers } from "next/headers";
 import { getRuntimeMatches } from "@/lib/fixtures";
 import { getAppBaseUrl, isGoogleConfigured } from "@/lib/utils";
 import { getSelectedMatches, normalizeSelection } from "@/lib/selection";
@@ -11,6 +12,7 @@ type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
 export default async function ReviewPage({ searchParams }: { searchParams: SearchParams }) {
   const params = await searchParams;
+  const requestHeaders = await headers();
   const mode = (typeof params.mode === "string" ? params.mode : "all") as SelectionInput["mode"];
   const selection = normalizeSelection({
     mode,
@@ -48,7 +50,7 @@ export default async function ReviewPage({ searchParams }: { searchParams: Searc
         </div>
       </section>
 
-      <ReviewClient selection={selection} appBaseUrl={getAppBaseUrl()} googleConfigured={isGoogleConfigured()} />
+      <ReviewClient selection={selection} appBaseUrl={getAppBaseUrl(requestHeaders)} googleConfigured={isGoogleConfigured()} />
 
       <section>
         <h2 className="text-2xl font-bold">Selected matches</h2>
