@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/admin/refresh-fixtures",
-      "schedule": "0 * * * *"
+      "schedule": "30 4 * * *"
     }
   ]
 }

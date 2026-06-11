@@ -3,13 +3,16 @@ import { ResultClient } from "@/app/result/result-client";
 import { getAppBaseUrl, isGoogleConfigured } from "@/lib/utils";
 import type { SelectionInput } from "@/lib/types";
 
-export default function ResultPage({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
-  const method = typeof searchParams.method === "string" ? searchParams.method : "feed";
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
+
+export default async function ResultPage({ searchParams }: { searchParams: SearchParams }) {
+  const params = await searchParams;
+  const method = typeof params.method === "string" ? params.method : "feed";
   const selection: SelectionInput = {
-    mode: (typeof searchParams.mode === "string" ? searchParams.mode : "all") as SelectionInput["mode"],
-    teams: typeof searchParams.teams === "string" ? searchParams.teams.split(",") : undefined,
-    cities: typeof searchParams.cities === "string" ? searchParams.cities.split(",") : undefined,
-    stadiums: typeof searchParams.stadiums === "string" ? searchParams.stadiums.split(",") : undefined
+    mode: (typeof params.mode === "string" ? params.mode : "all") as SelectionInput["mode"],
+    teams: typeof params.teams === "string" ? params.teams.split(",") : undefined,
+    cities: typeof params.cities === "string" ? params.cities.split(",") : undefined,
+    stadiums: typeof params.stadiums === "string" ? params.stadiums.split(",") : undefined
   };
 
   return (

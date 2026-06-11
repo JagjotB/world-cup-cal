@@ -36,14 +36,14 @@ Screenshots will be added after the first hosted release.
 
 ## Tech Stack
 
-Next.js, TypeScript, Tailwind CSS, NextAuth/Auth.js, Prisma, SQLite locally, PostgreSQL-ready for production, Vitest, Vercel.
+Next.js, TypeScript, Tailwind CSS, NextAuth/Auth.js, Prisma, PostgreSQL, Vitest, Vercel.
 
 ## Local Setup
 
 ```bash
 npm install
 cp .env.example .env
-npx prisma migrate dev
+npx prisma migrate deploy
 npm run db:seed
 npm run dev
 ```
@@ -52,14 +52,14 @@ The app works without Google OAuth for .ics downloads and feed URLs. Google OAut
 
 ## Environment Variables
 
-`DATABASE_URL` points Prisma at SQLite locally or PostgreSQL in production. `NEXTAUTH_URL` and `NEXTAUTH_SECRET` are required for auth. `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` enable Google direct insert. `APP_BASE_URL` is used to generate public feed URLs. `FIXTURE_SOURCE_URL` points the refresh job at the World Cup schedule page. `FRIENDLIES_SOURCE_URL` points it at the international friendlies page. `CRON_SECRET` protects the refresh endpoint.
+`DATABASE_URL` points Prisma at PostgreSQL. `NEXTAUTH_URL` and `NEXTAUTH_SECRET` are required for auth. `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` enable Google direct insert. `APP_BASE_URL` is used to generate public feed URLs. `FIXTURE_SOURCE_URL` points the refresh job at the World Cup schedule page. `FRIENDLIES_SOURCE_URL` points it at the international friendlies page. `CRON_SECRET` protects the refresh endpoint.
 
 ## Database
 
 Run migrations with:
 
 ```bash
-npx prisma migrate dev
+npm run db:deploy
 ```
 
 Seed the current fixture baseline with friendlies plus the 104-match tournament schedule:
@@ -90,19 +90,19 @@ Feeds return valid iCalendar content and use stable event UIDs.
 
 ## Google Direct Insert
 
-Google direct insert uses OAuth with `https://www.googleapis.com/auth/calendar.events`, inserts into the user's primary calendar, and stores only provider event IDs for duplicate detection. Public Google OAuth apps may need Google verification before broad public use.
+Google direct insert uses OAuth with `https://www.googleapis.com/auth/calendar.events.owned`, inserts into the user's primary calendar, and stores provider credentials plus event IDs for authenticated insertion and duplicate detection. Public Google OAuth apps may need Google verification before broad public use.
 
 ## Deployment
 
-Deploy on Vercel, configure environment variables, connect a production database, run Prisma migrations, and add the production Google OAuth redirect URI.
+Deploy on Vercel, connect a managed PostgreSQL database, configure environment variables, run `npm run db:deploy` and `npm run db:seed`, and add the production Google OAuth redirect URI.
 
 ## Privacy and Security
 
-No account is needed for .ics or feed use. Google access tokens are never exposed to the browser. World Cup Calendar stores basic account info and event IDs only when Google direct insert is used.
+No account is needed for .ics or feed use. Google credentials are stored server-side and are never exposed to the browser. See the in-app privacy policy for the complete disclosure.
 
 ## Known Limitations
 
-The checked-in fixture baseline contains pre-tournament friendlies plus 104 World Cup matches. Automatic updates depend on `FIXTURE_SOURCE_URL`, `FRIENDLIES_SOURCE_URL`, `CRON_SECRET`, and the deployed cron job. Full VTIMEZONE blocks are not yet emitted; ICS events are emitted as UTC values from match time data.
+The checked-in fixture baseline contains pre-tournament friendlies plus 104 World Cup matches. Automatic updates run daily and depend on `FIXTURE_SOURCE_URL`, `FRIENDLIES_SOURCE_URL`, `CRON_SECRET`, and the deployed cron job. Full VTIMEZONE blocks are not yet emitted; ICS events are emitted as UTC values from match time data.
 
 ## Roadmap
 

@@ -7,13 +7,16 @@ import type { SelectionInput } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
-export default async function ReviewPage({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
-  const mode = (typeof searchParams.mode === "string" ? searchParams.mode : "all") as SelectionInput["mode"];
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
+
+export default async function ReviewPage({ searchParams }: { searchParams: SearchParams }) {
+  const params = await searchParams;
+  const mode = (typeof params.mode === "string" ? params.mode : "all") as SelectionInput["mode"];
   const selection = normalizeSelection({
     mode,
-    teams: typeof searchParams.teams === "string" ? searchParams.teams.split(",") : undefined,
-    cities: typeof searchParams.cities === "string" ? searchParams.cities.split(",") : undefined,
-    stadiums: typeof searchParams.stadiums === "string" ? searchParams.stadiums.split(",") : undefined
+    teams: typeof params.teams === "string" ? params.teams.split(",") : undefined,
+    cities: typeof params.cities === "string" ? params.cities.split(",") : undefined,
+    stadiums: typeof params.stadiums === "string" ? params.stadiums.split(",") : undefined
   });
   const selectedMatches = getSelectedMatches(selection, await getRuntimeMatches());
   const selectedFilters =

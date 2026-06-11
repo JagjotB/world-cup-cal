@@ -38,54 +38,47 @@ async function refreshFixtures(request: Request) {
     ...parseGuardianFriendlies(await friendliesResponse.text()),
     ...parseWorldCuplySchedule(await worldCupResponse.text())
   ];
-  const incomingIds = matches.map((match) => match.id);
 
-  await prisma.match.deleteMany({
-    where: {
-      id: {
-        notIn: incomingIds
-      }
-    }
-  });
-
-  for (const match of matches) {
-    await prisma.match.upsert({
-      where: { id: match.id },
-      update: {
-        matchNumber: match.matchNumber,
-        homeTeam: match.homeTeam,
-        awayTeam: match.awayTeam,
-        stage: match.stage,
-        startTime: new Date(match.startTime),
-        endTime: new Date(match.endTime),
-        timezone: match.timezone,
-        stadium: match.stadium,
-        city: match.city,
-        country: match.country,
-        competition: match.competition,
-        source: match.source,
-        sourceUrl: match.sourceUrl,
-        status: match.status
-      },
-      create: {
-        id: match.id,
-        matchNumber: match.matchNumber,
-        homeTeam: match.homeTeam,
-        awayTeam: match.awayTeam,
-        stage: match.stage,
-        startTime: new Date(match.startTime),
-        endTime: new Date(match.endTime),
-        timezone: match.timezone,
-        stadium: match.stadium,
-        city: match.city,
-        country: match.country,
-        competition: match.competition,
-        source: match.source,
-        sourceUrl: match.sourceUrl,
-        status: match.status
-      }
-    });
-  }
+  await prisma.$transaction(
+    matches.map((match) =>
+      prisma.match.upsert({
+        where: { id: match.id },
+        update: {
+          matchNumber: match.matchNumber,
+          homeTeam: match.homeTeam,
+          awayTeam: match.awayTeam,
+          stage: match.stage,
+          startTime: new Date(match.startTime),
+          endTime: new Date(match.endTime),
+          timezone: match.timezone,
+          stadium: match.stadium,
+          city: match.city,
+          country: match.country,
+          competition: match.competition,
+          source: match.source,
+          sourceUrl: match.sourceUrl,
+          status: match.status
+        },
+        create: {
+          id: match.id,
+          matchNumber: match.matchNumber,
+          homeTeam: match.homeTeam,
+          awayTeam: match.awayTeam,
+          stage: match.stage,
+          startTime: new Date(match.startTime),
+          endTime: new Date(match.endTime),
+          timezone: match.timezone,
+          stadium: match.stadium,
+          city: match.city,
+          country: match.country,
+          competition: match.competition,
+          source: match.source,
+          sourceUrl: match.sourceUrl,
+          status: match.status
+        }
+      })
+    )
+  );
 
   return NextResponse.json({ count: matches.length, refreshedAt: new Date().toISOString() });
 }

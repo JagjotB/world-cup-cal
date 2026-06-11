@@ -14,7 +14,7 @@ The June 2-10 friendly results were cross-checked against The Guardian's results
 https://www.theguardian.com/football/friendlies/results
 ```
 
-Configured deployments can refresh the database from `FIXTURE_SOURCE_URL` and `FRIENDLIES_SOURCE_URL` through `/api/admin/refresh-fixtures`. The included Vercel cron runs hourly and authenticates with `CRON_SECRET`.
+Configured deployments can refresh the database from `FIXTURE_SOURCE_URL` and `FRIENDLIES_SOURCE_URL` through `/api/admin/refresh-fixtures`. The included Vercel cron runs daily at 04:30 UTC, one hour after the latest scheduled match end, and authenticates with `CRON_SECRET`. Refreshes upsert a complete, successfully parsed source response in one transaction and do not delete the verified baseline.
 
 Current source:
 

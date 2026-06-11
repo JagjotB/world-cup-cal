@@ -4,16 +4,20 @@ import type { SelectionMode } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
-export default async function SelectPage({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
+
+export default async function SelectPage({ searchParams }: { searchParams: SearchParams }) {
+  const params = await searchParams;
+
   return (
     <SelectClient
       teams={await getRuntimeTeams()}
       cities={await getRuntimeCities()}
       stadiums={await getRuntimeStadiums()}
-      initialMode={(typeof searchParams.mode === "string" ? searchParams.mode : "teams") as SelectionMode}
-      initialTeams={typeof searchParams.teams === "string" ? searchParams.teams.split(",").filter(Boolean) : []}
-      initialCities={typeof searchParams.cities === "string" ? searchParams.cities.split(",").filter(Boolean) : []}
-      initialStadiums={typeof searchParams.stadiums === "string" ? searchParams.stadiums.split(",").filter(Boolean) : []}
+      initialMode={(typeof params.mode === "string" ? params.mode : "teams") as SelectionMode}
+      initialTeams={typeof params.teams === "string" ? params.teams.split(",").filter(Boolean) : []}
+      initialCities={typeof params.cities === "string" ? params.cities.split(",").filter(Boolean) : []}
+      initialStadiums={typeof params.stadiums === "string" ? params.stadiums.split(",").filter(Boolean) : []}
     />
   );
 }

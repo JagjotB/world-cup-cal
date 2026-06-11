@@ -16,4 +16,4 @@ NEXTAUTH_SECRET=
 NEXTAUTH_URL=
 ```
 
-World Cup Calendar requests `https://www.googleapis.com/auth/calendar.events` so it can create only the events the user chooses. Public apps may require Google OAuth verification.
+World Cup Calendar requests `https://www.googleapis.com/auth/calendar.events.owned` so it can create only the events the user chooses on calendars they own. Public apps may require Google OAuth verification. Configure the consent screen with the deployed privacy-policy and terms URLs before requesting verification.
