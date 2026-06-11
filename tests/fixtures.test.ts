@@ -25,11 +25,15 @@ describe("verified fixture baseline", () => {
   });
 
   it("builds selector options only from teams with fixtures", () => {
-    const selectorTeams = getTeamsFromMatches(matches);
+    const worldCupMatches = matches.filter((match) => match.competition === "FIFA World Cup 2026");
+    const selectorTeams = getTeamsFromMatches(worldCupMatches);
     expect(selectorTeams).toEqual(teams);
+    expect(selectorTeams).toHaveLength(48);
+    expect(selectorTeams).not.toContain("Italy");
+    expect(selectorTeams).not.toContain("Wales");
     expect(
       selectorTeams.every((team) =>
-        matches.some((match) => [match.homeTeam, match.awayTeam].includes(team))
+        worldCupMatches.some((match) => [match.homeTeam, match.awayTeam].includes(team))
       )
     ).toBe(true);
   });
@@ -43,7 +47,9 @@ describe("verified fixture baseline", () => {
           : match
     );
 
-    const selectorTeams = getTeamsFromMatches(withAliases);
+    const selectorTeams = getTeamsFromMatches(
+      withAliases.filter((match) => match.competition === "FIFA World Cup 2026")
+    );
     expect(selectorTeams).toContain("United States");
     expect(selectorTeams).toContain("Côte d’Ivoire");
     expect(selectorTeams).not.toContain("USA");

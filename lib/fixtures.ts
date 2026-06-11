@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/db";
-import { cities as staticCities, matches as staticMatches, stadiums as staticStadiums, teams as staticTeams } from "@/lib/matches";
+import { cities as staticCities, matches as staticMatches, stadiums as staticStadiums } from "@/lib/matches";
 import { getTeamsFromMatches, normalizeTeamName } from "@/lib/team-names";
 import type { Match } from "@/lib/types";
 
@@ -52,8 +52,9 @@ export async function getRuntimeMatches() {
 
 export async function getRuntimeTeams() {
   const runtimeMatches = await getRuntimeMatches();
-  if (runtimeMatches.length === 0) return staticTeams;
-  return getTeamsFromMatches(runtimeMatches);
+  return getTeamsFromMatches(
+    runtimeMatches.filter((match) => match.competition === "FIFA World Cup 2026")
+  );
 }
 
 export async function getRuntimeCities() {
