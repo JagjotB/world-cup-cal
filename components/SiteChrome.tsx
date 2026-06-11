@@ -28,7 +28,7 @@ export function SiteNav() {
           <Link href="/#how" className="text-sm text-muted-foreground transition hover:text-foreground">How it works</Link>
           <Link href="/#calendars" className="text-sm text-muted-foreground transition hover:text-foreground">Calendars</Link>
           <Link href="/docs" className="text-sm text-muted-foreground transition hover:text-foreground">Docs</Link>
-          <a href="https://github.com/jagjotbisram/worldcup" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition hover:text-foreground">
+          <a href="https://github.com/JagjotB/world-cup-cal" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition hover:text-foreground">
             <Github className="h-4 w-4" /> GitHub
           </a>
         </nav>
