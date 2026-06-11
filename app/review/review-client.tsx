@@ -58,8 +58,8 @@ export function ReviewClient({
   return (
     <section className="grid gap-6">
       <div>
-        <h2 className="text-2xl font-black text-ink">Choose your calendar</h2>
-        <div className="mt-3 flex flex-wrap gap-2">
+        <h2 className="text-2xl font-bold">Choose your calendar</h2>
+        <div className="mt-4 flex w-fit flex-wrap gap-2 rounded-2xl border border-white/10 bg-black/30 p-1">
           {[
             ["google", "Google Calendar"],
             ["apple", "Apple Calendar"],
@@ -70,7 +70,7 @@ export function ReviewClient({
               key={value}
               type="button"
               onClick={() => setProvider(value as Provider)}
-              className={`rounded-md px-4 py-2 text-sm font-bold ${provider === value ? "bg-ink text-white" : "border border-ink/15 bg-white text-ink"}`}
+              className={`rounded-full px-4 py-2 text-xs font-semibold transition ${provider === value ? "bg-gold text-gold-foreground shadow-glow" : "text-muted-foreground hover:text-foreground"}`}
             >
               {label}
             </button>
@@ -88,10 +88,10 @@ export function ReviewClient({
           >
             <div className="grid gap-3">
               <CopyButton value={provider === "apple" ? webcalUrl : feedUrl} label="Copy feed URL" />
-              <Link href={`/result?method=feed&${query}`} className="text-sm font-bold text-pitch hover:text-ink">
+              <Link href={`/result?method=feed&${query}`} className="text-sm font-bold text-gold hover:text-foreground">
                 View feed instructions
               </Link>
-              <p className="break-all text-xs text-ink/55">{provider === "apple" ? webcalUrl : feedUrl}</p>
+              <p className="break-all text-xs text-muted-foreground">{provider === "apple" ? webcalUrl : feedUrl}</p>
             </div>
           </CalendarOptionCard>
         )}
@@ -105,7 +105,7 @@ export function ReviewClient({
             type="button"
             onClick={downloadIcs}
             disabled={loading}
-            className="inline-flex items-center gap-2 rounded-md bg-pitch px-4 py-2 text-sm font-bold text-white hover:bg-ink disabled:bg-ink/25"
+            className="inline-flex items-center gap-2 rounded-full bg-cta px-4 py-2 text-sm font-semibold text-gold-foreground shadow-glow disabled:opacity-40"
           >
             {loading && <LoadingSpinner />}
             Download .ics
@@ -120,13 +120,13 @@ export function ReviewClient({
             disabled={!googleConfigured}
           >
             {googleConfigured ? (
-              <button type="button" onClick={directGoogleInsert} className="rounded-md bg-ink px-4 py-2 text-sm font-bold text-white hover:bg-pitch">
+              <button type="button" onClick={directGoogleInsert} className="rounded-full bg-cta px-4 py-2 text-sm font-semibold text-gold-foreground shadow-glow">
                 Connect Google Calendar
               </button>
             ) : (
-              <p className="text-sm font-semibold text-ink/65">Google direct insert is not configured in this deployment. You can still use .ics download or calendar feed.</p>
+              <p className="text-sm font-semibold text-muted-foreground">Google direct insert is not configured in this deployment. You can still use .ics download or calendar feed.</p>
             )}
-            <p className="mt-3 text-xs leading-5 text-ink/55">Direct Google insert requires permission so World Cup Calendar can create only the match events you choose.</p>
+            <p className="mt-3 text-xs leading-5 text-muted-foreground">Direct Google insert requires permission so World Cup Calendar can create only the match events you choose.</p>
           </CalendarOptionCard>
         )}
 
@@ -137,12 +137,12 @@ export function ReviewClient({
             disabled
             description="Direct Outlook insert is coming soon and will use Microsoft OAuth and Microsoft Graph."
           >
-            <p className="text-sm font-semibold text-ink/65">Use the feed URL or .ics file for now.</p>
+            <p className="text-sm font-semibold text-muted-foreground">Use the feed URL or .ics file for now.</p>
           </CalendarOptionCard>
         )}
       </div>
 
-      <div className="grid gap-4 rounded-lg border border-ink/10 bg-white p-5 md:grid-cols-3">
+      <div className="grid gap-6 rounded-2xl border border-white/10 bg-black/20 p-6 md:grid-cols-3">
         <InstructionSteps
           title="Google feed"
           steps={["Open Google Calendar on desktop.", "Beside Other calendars, click plus.", "Choose From URL.", "Paste the generated calendar feed URL.", "Click Add calendar."]}

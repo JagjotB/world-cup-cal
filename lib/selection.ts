@@ -1,4 +1,5 @@
 import { matches } from "@/lib/matches";
+import { normalizeTeamName } from "@/lib/team-names";
 import type { Match, SelectionInput } from "@/lib/types";
 
 function normalizeList(values?: string[]) {
@@ -9,8 +10,8 @@ function normalizeList(values?: string[]) {
 }
 
 function includesAny(values: string[], candidates: string[]) {
-  const wanted = new Set(values.map((value) => value.toLowerCase()));
-  return candidates.some((candidate) => wanted.has(candidate.toLowerCase()));
+  const wanted = new Set(values.map((value) => normalizeTeamName(value).toLowerCase()));
+  return candidates.some((candidate) => wanted.has(normalizeTeamName(candidate).toLowerCase()));
 }
 
 export function filterMatchesByTeams(source: Match[], teams: string[]) {

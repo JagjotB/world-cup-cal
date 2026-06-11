@@ -16,7 +16,9 @@ describe("ics", () => {
   });
 
   it("escapes text correctly", () => {
-    const ics = generateIcsCalendar([{ ...matches[0], stadium: "A, B; C\\D" }]);
+    const ics = generateIcsCalendar([
+      { ...matches[0], stadium: "A, B; C\\D", city: "Toronto", country: "Canada" }
+    ]);
     expect(ics).toContain("LOCATION:A\\, B\\; C\\\\D\\, Toronto\\, Canada");
   });
 

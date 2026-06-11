@@ -3,14 +3,122 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: light;
+  color-scheme: dark;
+  --background: #07111f;
+  --foreground: #f5f7fa;
+  --surface: #0d1a2a;
+  --muted: #a7b2c1;
+  --gold: #d9ad55;
+  --cyan: #55d9e7;
+  --host-red: #dc4d5d;
+  --host-green: #32a86b;
+  --host-blue: #4c7de8;
+  --gradient-hero:
+    radial-gradient(circle at 50% 0%, rgb(217 173 85 / 24%), transparent 44%),
+    radial-gradient(circle at 82% 30%, rgb(137 92 246 / 17%), transparent 48%),
+    radial-gradient(circle at 18% 65%, rgb(85 217 231 / 13%), transparent 52%),
+    linear-gradient(135deg, #030914 0%, #07111f 48%, #0d1a2a 100%);
+  --gradient-glass: linear-gradient(135deg, rgb(255 255 255 / 9%), rgb(255 255 255 / 3%));
+  --gradient-cta: linear-gradient(135deg, #d9ad55 0%, #f0cf69 48%, #cf654c 100%);
+  --shadow-glow: 0 0 0 1px rgb(255 255 255 / 6%), 0 30px 80px -20px rgb(217 173 85 / 28%);
+  --shadow-card: 0 1px 0 rgb(255 255 255 / 6%) inset, 0 30px 60px -30px rgb(0 0 0 / 70%);
+}
+
+* {
+  border-color: rgb(255 255 255 / 10%);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: #f6f3ea;
-  color: #17201c;
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: Sora, Inter, ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.02em;
 }
 
 button:disabled {
   cursor: not-allowed;
+}
+
+::selection {
+  background: rgb(217 173 85 / 35%);
+  color: white;
+}
+
+@layer utilities {
+  .font-display {
+    font-family: Sora, Inter, ui-sans-serif, system-ui, sans-serif;
+  }
+
+  .font-mono {
+    font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  }
+
+  .bg-hero {
+    background: var(--gradient-hero);
+  }
+
+  .bg-glass {
+    background: var(--gradient-glass);
+    backdrop-filter: blur(14px);
+  }
+
+  .bg-cta {
+    background: var(--gradient-cta);
+  }
+
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  .pitch-lines {
+    background-image:
+      linear-gradient(rgb(255 255 255 / 4%) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(255 255 255 / 4%) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .goal-net {
+    background-image:
+      linear-gradient(45deg, rgb(255 255 255 / 5%) 1px, transparent 1px),
+      linear-gradient(-45deg, rgb(255 255 255 / 5%) 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+
+  .stadium-beam {
+    background:
+      radial-gradient(ellipse 60% 40% at 50% 0%, rgb(217 173 85 / 18%), transparent 70%),
+      radial-gradient(ellipse 40% 30% at 20% 0%, rgb(76 125 232 / 15%), transparent 70%),
+      radial-gradient(ellipse 40% 30% at 80% 0%, rgb(220 77 93 / 15%), transparent 70%);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  @keyframes float-slow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .animate-float {
+    animation: float-slow 6s ease-in-out infinite;
+  }
 }

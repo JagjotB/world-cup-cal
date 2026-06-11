@@ -12,6 +12,13 @@ def clean(value)
   CGI.unescapeHTML(value.to_s.gsub(/<[^>]+>/, "").gsub(/\s+/, " ").strip)
 end
 
+def normalize_team(value)
+  {
+    "USA" => "United States",
+    "Ivory Coast" => "Côte d’Ivoire"
+  }.fetch(value, value)
+end
+
 def import_world_cup(path)
   system("ruby", "scripts/import-worldcuply-schedule.rb", path, exception: true)
   JSON.parse(File.read("data/matches.json"))
@@ -24,8 +31,8 @@ def parse_friendlies(path)
   rows.map do |row_match|
     row = row_match.first
     start_time = row[/<time dateTime="([^"]+)"/, 1]
-    home = clean(row[/<div class="dcr-3l4pru">(.*?)<\/div>/m, 1])
-    away = clean(row[/<div class="dcr-rm7qtf">(.*?)<\/div>/m, 1])
+    home = normalize_team(clean(row[/<div class="dcr-3l4pru">(.*?)<\/div>/m, 1]))
+    away = normalize_team(clean(row[/<div class="dcr-rm7qtf">(.*?)<\/div>/m, 1]))
     next unless start_time && home.length.positive? && away.length.positive?
     key = "#{start_time}|#{home}|#{away}"
     next if seen[key]

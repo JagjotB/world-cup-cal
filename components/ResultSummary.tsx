@@ -16,10 +16,10 @@ export function ResultSummary({
         ["Skipped", skipped],
         ["Failed", failed]
       ].map(([label, items]) => (
-        <section key={label as string} className="rounded-lg border border-ink/10 bg-white p-4">
-          <p className="text-3xl font-black text-ink">{(items as GoogleInsertItem[]).length}</p>
-          <h3 className="mt-1 font-bold text-ink">{label as string}</h3>
-          <ul className="mt-3 grid gap-2 text-sm text-ink/70">
+        <section key={label as string} className="rounded-2xl border border-white/10 bg-glass p-5 shadow-card">
+          <p className="text-3xl font-black text-gold">{(items as GoogleInsertItem[]).length}</p>
+          <h3 className="mt-1 font-bold">{label as string}</h3>
+          <ul className="mt-3 grid gap-2 text-sm text-muted-foreground">
             {(items as GoogleInsertItem[]).map((item) => (
               <li key={item.matchId}>{item.title}{item.reason ? ` - ${item.reason}` : ""}</li>
             ))}

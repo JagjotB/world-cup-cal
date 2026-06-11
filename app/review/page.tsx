@@ -26,19 +26,21 @@ export default async function ReviewPage({ searchParams }: { searchParams: { [ke
           : selection.stadiums ?? [];
 
   return (
-    <main className="mx-auto grid max-w-6xl gap-8 px-4 py-10">
+    <main className="relative min-h-screen overflow-hidden bg-hero">
+      <div className="absolute inset-0 pitch-lines opacity-15 [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]" />
+      <div className="relative mx-auto grid max-w-6xl gap-8 px-5 py-14 lg:px-8 lg:py-20">
       <div>
-        <p className="text-sm font-bold uppercase tracking-wide text-pitch">Review</p>
-        <h1 className="mt-2 text-4xl font-black text-ink">{selectedMatches.length} matches selected</h1>
-        <p className="mt-3 leading-7 text-ink/70">Fastest option: download an .ics file or copy a calendar feed URL. No account required.</p>
+        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-gold">Step 2 of 3 · Review</p>
+        <h1 className="mt-3 text-4xl font-extrabold sm:text-5xl">{selectedMatches.length} matches selected</h1>
+        <p className="mt-4 text-muted-foreground">Download an .ics file or copy a live calendar feed. No account required.</p>
       </div>
 
-      <section className="rounded-lg border border-ink/10 bg-white p-5">
-        <p className="text-sm font-bold uppercase tracking-wide text-pitch">Selected mode</p>
-        <h2 className="mt-1 text-xl font-black capitalize text-ink">{selection.mode}</h2>
+      <section className="rounded-2xl border border-gold/30 bg-gold/[0.06] p-6 shadow-glow">
+        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-gold">Selected mode</p>
+        <h2 className="mt-2 text-xl font-bold capitalize">{selection.mode}</h2>
         <div className="mt-3 flex flex-wrap gap-2">
           {selectedFilters.map((filter) => (
-            <span key={filter} className="rounded-md bg-skysoft px-2 py-1 text-sm font-semibold text-ink">{filter}</span>
+            <span key={filter} className="rounded-full border border-gold/30 bg-gold/10 px-3 py-1 text-xs font-semibold text-gold">{filter}</span>
           ))}
         </div>
       </section>
@@ -46,11 +48,12 @@ export default async function ReviewPage({ searchParams }: { searchParams: { [ke
       <ReviewClient selection={selection} appBaseUrl={getAppBaseUrl()} googleConfigured={isGoogleConfigured()} />
 
       <section>
-        <h2 className="text-2xl font-black text-ink">Match preview</h2>
+        <h2 className="text-2xl font-bold">Selected matches</h2>
         <div className="mt-4 grid gap-4 md:grid-cols-2">
           {selectedMatches.map((match) => <MatchCard key={match.id} match={match} />)}
         </div>
       </section>
+      </div>
     </main>
   );
 }

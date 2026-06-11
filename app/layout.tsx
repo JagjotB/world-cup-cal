@@ -1,27 +1,19 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { SiteFooter, SiteNav } from "@/components/SiteChrome";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "World Cup Calendar",
-  description: "Pick matches and add them to your calendar."
+  title: "World Cup Calendar - Pick matches. Add them to your calendar.",
+  description: "Choose the matches you care about and add them to Google Calendar, Apple Calendar, Outlook, or any calendar app."
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <header className="border-b border-ink/10 bg-white/80 backdrop-blur">
-          <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-            <Link href="/" className="text-lg font-black text-ink">World Cup Calendar</Link>
-            <div className="flex gap-4 text-sm font-semibold text-ink/70">
-              <Link href="/docs">Docs</Link>
-              <Link href="/privacy">Privacy</Link>
-              <Link href="/terms">Terms</Link>
-            </div>
-          </nav>
-        </header>
+        <SiteNav />
         {children}
+        <SiteFooter />
       </body>
     </html>
   );

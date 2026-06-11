@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import { CitySelector } from "@/components/CitySelector";
 import { DisclaimerBanner } from "@/components/DisclaimerBanner";
 import { StadiumSelector } from "@/components/StadiumSelector";
@@ -44,14 +45,29 @@ export function SelectClient({
   }
 
   return (
-    <main className="mx-auto grid max-w-5xl gap-8 px-4 py-10">
+    <main className="relative min-h-screen overflow-hidden bg-hero pb-28">
+      <div className="absolute inset-0 pitch-lines opacity-20 [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]" />
+      <div className="relative mx-auto grid max-w-5xl gap-8 px-5 py-14 lg:px-8 lg:py-20">
       <div>
-        <p className="text-sm font-bold uppercase tracking-wide text-pitch">Build your calendar</p>
-        <h1 className="mt-2 text-4xl font-black text-ink">Choose matches</h1>
-        <p className="mt-3 max-w-2xl leading-7 text-ink/70">Select teams, host cities, or stadiums. Your selection is carried in the URL where possible.</p>
+        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-gold">Step 1 of 3</p>
+        <h1 className="mt-3 text-4xl font-extrabold sm:text-5xl">Build your match calendar</h1>
+        <p className="mt-4 max-w-2xl text-muted-foreground">Choose every match or filter by the teams, cities, and stadiums you care about.</p>
       </div>
 
-      <div className="flex flex-wrap gap-2">
+      <section className="rounded-2xl border border-gold/30 bg-gold/[0.06] p-6 shadow-glow">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-gold">Fastest</p>
+            <h2 className="mt-2 text-2xl font-bold">Add every match</h2>
+            <p className="mt-1 text-sm text-muted-foreground">The complete schedule, from opening match through the final.</p>
+          </div>
+          <Link href="/review?mode=all" className="inline-flex h-11 items-center justify-center rounded-full bg-cta px-5 text-sm font-semibold text-gold-foreground shadow-glow">
+            Add all matches
+          </Link>
+        </div>
+      </section>
+
+      <div className="flex w-fit flex-wrap gap-2 rounded-full border border-white/10 bg-black/30 p-1">
         {[
           ["teams", "Teams"],
           ["cities", "Cities"],
@@ -61,31 +77,32 @@ export function SelectClient({
             key={value}
             type="button"
             onClick={() => setMode(value as SelectionMode)}
-            className={`rounded-md px-4 py-2 text-sm font-bold ${mode === value ? "bg-pitch text-white" : "border border-ink/15 bg-white text-ink"}`}
+            className={`rounded-full px-4 py-2 text-xs font-semibold transition ${mode === value ? "bg-gold text-gold-foreground shadow-glow" : "text-muted-foreground hover:text-foreground"}`}
           >
             {label}
           </button>
         ))}
       </div>
 
-      <section className="rounded-lg border border-ink/10 bg-white/50 p-5">
+      <section className="rounded-3xl border border-white/10 bg-glass p-5 shadow-card sm:p-8">
         {mode === "teams" && <TeamSelector teams={teams} selected={selectedTeams} onChange={setSelectedTeams} />}
         {mode === "cities" && <CitySelector cities={cities} selected={selectedCities} onChange={setSelectedCities} />}
         {mode === "stadiums" && <StadiumSelector stadiums={stadiums} selected={selectedStadiums} onChange={setSelectedStadiums} />}
       </section>
 
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <p className="font-semibold text-ink">{selectedCount} selected</p>
+      <div className="flex flex-wrap items-center justify-between gap-4 border-t border-white/[0.06] pt-6">
+        <p className="rounded-full border border-gold/30 bg-gold/10 px-3 py-1.5 font-mono text-xs font-semibold text-gold">{selectedCount} selected</p>
         <button
           type="button"
           disabled={selectedCount === 0}
           onClick={continueToReview}
-          className="rounded-md bg-pitch px-5 py-3 font-bold text-white shadow-soft hover:bg-ink disabled:bg-ink/25"
+          className="rounded-full bg-cta px-6 py-3 text-sm font-semibold text-gold-foreground shadow-glow transition hover:-translate-y-0.5 disabled:opacity-40"
         >
-          Continue
+          Review calendar →
         </button>
       </div>
       <DisclaimerBanner />
+      </div>
     </main>
   );
 }

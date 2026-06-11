@@ -18,12 +18,12 @@ export function CalendarOptionCard({
   recommended?: boolean;
 }) {
   return (
-    <article className={cx("rounded-lg border bg-white p-5 shadow-sm", disabled ? "border-ink/10 opacity-70" : "border-ink/10")}>
+    <article className={cx("rounded-2xl border border-white/10 bg-glass p-5 shadow-card", disabled ? "opacity-60" : "")}>
       <div className="flex items-center justify-between gap-3">
-        <h3 className="text-lg font-bold text-ink">{title}</h3>
+        <h3 className="text-lg font-bold">{title}</h3>
         <ProviderBadge label={label} tone={disabled ? "disabled" : recommended ? "recommended" : "neutral"} />
       </div>
-      <p className="mt-2 text-sm leading-6 text-ink/70">{description}</p>
+      <p className="mt-2 text-sm leading-6 text-muted-foreground">{description}</p>
       <div className="mt-4">{children}</div>
     </article>
   );

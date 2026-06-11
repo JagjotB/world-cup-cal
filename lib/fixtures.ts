@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db";
 import { cities as staticCities, matches as staticMatches, stadiums as staticStadiums, teams as staticTeams } from "@/lib/matches";
+import { getTeamsFromMatches, normalizeTeamName } from "@/lib/team-names";
 import type { Match } from "@/lib/types";
 
 function dbMatchToMatch(match: {
@@ -22,8 +23,8 @@ function dbMatchToMatch(match: {
   return {
     id: match.id,
     matchNumber: match.matchNumber,
-    homeTeam: match.homeTeam,
-    awayTeam: match.awayTeam,
+    homeTeam: normalizeTeamName(match.homeTeam),
+    awayTeam: normalizeTeamName(match.awayTeam),
     stage: match.stage,
     startTime: match.startTime.toISOString(),
     endTime: match.endTime.toISOString(),
@@ -52,7 +53,7 @@ export async function getRuntimeMatches() {
 export async function getRuntimeTeams() {
   const runtimeMatches = await getRuntimeMatches();
   if (runtimeMatches.length === 0) return staticTeams;
-  return Array.from(new Set(runtimeMatches.flatMap((match) => [match.homeTeam, match.awayTeam]).filter((team) => !/Winner|Loser|Group|third/i.test(team)))).sort();
+  return getTeamsFromMatches(runtimeMatches);
 }
 
 export async function getRuntimeCities() {

@@ -1,4 +1,5 @@
 import type { Match } from "@/lib/types";
+import { normalizeTeamName } from "@/lib/team-names";
 
 const countryByCity: Record<string, string> = {
   Atlanta: "United States",
@@ -71,8 +72,8 @@ export function parseWorldCuplySchedule(html: string): Match[] {
     matches.push({
       id: `match-${String(matchNumber).padStart(3, "0")}`,
       matchNumber,
-      homeTeam: teams[0],
-      awayTeam: teams[1],
+      homeTeam: normalizeTeamName(teams[0]),
+      awayTeam: normalizeTeamName(teams[1]),
       stage,
       startTime: new Date(startTime).toISOString(),
       endTime: addHours(startTime, /^group\s/i.test(stage) ? 2 : 2.5),
@@ -111,8 +112,8 @@ export function parseGuardianFriendlies(html: string): Match[] {
     seen.add(key);
 
     matches.push({
-      homeTeam,
-      awayTeam,
+      homeTeam: normalizeTeamName(homeTeam),
+      awayTeam: normalizeTeamName(awayTeam),
       stage: "International Friendly",
       startTime: new Date(startTime).toISOString(),
       endTime: addHours(startTime, 2),
