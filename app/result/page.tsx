@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { headers } from "next/headers";
 import { ResultClient } from "@/app/result/result-client";
-import { getAppBaseUrl, isGoogleConfigured } from "@/lib/utils";
+import { getAppBaseUrl, isGoogleConfigured, isMicrosoftConfigured } from "@/lib/utils";
 import type { SelectionInput } from "@/lib/types";
 
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
@@ -25,10 +25,22 @@ export default async function ResultPage({ searchParams }: { searchParams: Searc
       <div>
         <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-gold">Step 3 of 3 · Result</p>
         <h1 className="mt-3 text-4xl font-extrabold sm:text-5xl">
-          {method === "ics" ? "Your calendar file is ready." : method === "google" ? "Google Calendar insert" : "Your calendar feed is ready."}
+          {method === "ics"
+            ? "Your calendar file is ready."
+            : method === "google"
+              ? "Google Calendar insert"
+              : method === "microsoft"
+                ? "Microsoft Calendar insert"
+                : "Your calendar feed is ready."}
         </h1>
       </div>
-      <ResultClient method={method} selection={selection} appBaseUrl={getAppBaseUrl(requestHeaders)} googleConfigured={isGoogleConfigured()} />
+      <ResultClient
+        method={method}
+        selection={selection}
+        appBaseUrl={getAppBaseUrl(requestHeaders)}
+        googleConfigured={isGoogleConfigured()}
+        microsoftConfigured={isMicrosoftConfigured()}
+      />
       <Link href="/select?mode=teams" className="w-fit rounded-full border border-white/15 px-5 py-2.5 text-sm font-semibold hover:border-gold/50 hover:text-gold">
         Add more matches
       </Link>

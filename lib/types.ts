@@ -25,7 +25,7 @@ export type SelectionInput = {
   stadiums?: string[];
 };
 
-export type GoogleInsertItem = {
+export type CalendarInsertItem = {
   matchId: string;
   title: string;
   providerEventId?: string;

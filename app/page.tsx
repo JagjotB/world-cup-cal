@@ -132,7 +132,7 @@ export default function HomePage() {
           <div className="mt-12 grid gap-5 md:grid-cols-3">
             <Method icon={Radio} badge="Recommended" title="Live calendar feed">Subscribe once and let your calendar app refresh fixture updates.</Method>
             <Method icon={Download} badge="No login" title="Download .ics">Import selected matches into any calendar app.</Method>
-            <Method icon={CalendarRange} badge="Optional" title="Google direct insert">Connect Google Calendar and add your selected matches directly.</Method>
+            <Method icon={CalendarRange} badge="Optional" title="Direct insert">Connect Google or Microsoft Calendar and add your selected matches directly.</Method>
           </div>
         </div>
       </section>
@@ -146,7 +146,7 @@ export default function HomePage() {
           <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <Trust icon={ShieldCheck} title="No login required">Use .ics files or calendar feeds without creating an account.</Trust>
             <Trust icon={Check} title="You stay in control">Only the matches you select are included.</Trust>
-            <Trust icon={KeySquare} title="Google is optional">Direct insertion happens only after you approve access.</Trust>
+            <Trust icon={KeySquare} title="OAuth is optional">Direct insertion happens only after you approve Google or Microsoft access.</Trust>
             <Trust icon={Trophy} title="Unofficial and transparent">Fixture details should be verified with official sources.</Trust>
           </div>
         </div>
@@ -159,7 +159,7 @@ export default function HomePage() {
         <div className="relative mx-auto max-w-4xl px-5 py-28 text-center">
           <Eyebrow>Kickoff is coming</Eyebrow>
           <h2 className="mt-5 text-balance text-4xl font-extrabold leading-none sm:text-6xl">Build your match calendar <span className="text-gold">before kickoff.</span></h2>
-          <p className="mx-auto mt-6 max-w-xl text-muted-foreground">Subscribe to a feed, download an .ics file, or sync with Google.</p>
+          <p className="mx-auto mt-6 max-w-xl text-muted-foreground">Subscribe to a feed, download an .ics file, or sync with Google or Microsoft.</p>
           <Link href="/select" className="mt-10 inline-flex h-14 items-center rounded-full bg-cta px-8 font-semibold text-gold-foreground shadow-glow">Start selecting matches</Link>
         </div>
       </section>

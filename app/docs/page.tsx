@@ -13,7 +13,7 @@ export default function DocsPage() {
           ["Calendar feeds", "Subscribe once and let your calendar app refresh updates from the generated iCal URL."],
           ["ICS downloads", "Download a one-time calendar file and import it into Google Calendar, Apple Calendar, Outlook, or another calendar app."],
           ["Google direct insert", "Optional advanced path that requires Google sign-in and calendar event creation permission."],
-          ["Outlook direct insert", "Planned for Phase 2 using Microsoft OAuth and Microsoft Graph."]
+          ["Outlook direct insert", "Optional path that signs in with Microsoft and creates selected events through Microsoft Graph."]
         ].map(([title, text]) => (
           <article key={title} className="rounded-2xl border border-white/10 bg-glass p-5 shadow-card">
             <h2 className="text-xl font-bold">{title}</h2>

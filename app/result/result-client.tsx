@@ -6,47 +6,58 @@ import { InstructionSteps } from "@/components/InstructionSteps";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { ResultSummary } from "@/components/ResultSummary";
 import { generateFeedUrl } from "@/lib/calendar/feed";
-import type { GoogleInsertItem, SelectionInput } from "@/lib/types";
+import type { CalendarInsertItem, SelectionInput } from "@/lib/types";
 
 export function ResultClient({
   method,
   selection,
   appBaseUrl,
-  googleConfigured
+  googleConfigured,
+  microsoftConfigured
 }: {
   method: string;
   selection: SelectionInput;
   appBaseUrl: string;
   googleConfigured: boolean;
+  microsoftConfigured: boolean;
 }) {
-  const [googleResult, setGoogleResult] = useState<{ added: GoogleInsertItem[]; skipped: GoogleInsertItem[]; failed: GoogleInsertItem[] } | null>(null);
+  const [calendarResult, setCalendarResult] = useState<{ added: CalendarInsertItem[]; skipped: CalendarInsertItem[]; failed: CalendarInsertItem[] } | null>(null);
   const [error, setError] = useState("");
   const feedUrl = useMemo(() => generateFeedUrl(selection, appBaseUrl), [selection, appBaseUrl]);
 
   useEffect(() => {
-    if (method !== "google" || !googleConfigured || googleResult || error) return;
-    fetch("/api/calendar/google/insert", {
+    const isConfigured =
+      (method === "google" && googleConfigured) ||
+      (method === "microsoft" && microsoftConfigured);
+    if (!isConfigured || calendarResult || error) return;
+
+    const endpoint = method === "microsoft"
+      ? "/api/calendar/microsoft/insert"
+      : "/api/calendar/google/insert";
+    fetch(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(selection)
     })
       .then(async (response) => {
         const body = await response.json();
-        if (!response.ok) throw new Error(body.error ?? "Google insert failed.");
-        setGoogleResult(body);
+        if (!response.ok) throw new Error(body.error ?? "Calendar insert failed.");
+        setCalendarResult(body);
       })
       .catch((err: Error) => setError(err.message));
-  }, [method, googleConfigured, googleResult, error, selection]);
+  }, [method, googleConfigured, microsoftConfigured, calendarResult, error, selection]);
 
-  if (method === "google") {
-    if (!googleConfigured) {
-      return <p className="rounded-2xl border border-white/10 bg-glass p-5 text-muted-foreground">Google direct insert is not configured in this deployment. You can still use .ics download or calendar feed.</p>;
+  if (method === "google" || method === "microsoft") {
+    const providerName = method === "microsoft" ? "Microsoft" : "Google";
+    const configured = method === "microsoft" ? microsoftConfigured : googleConfigured;
+    if (!configured) {
+      return <p className="rounded-2xl border border-white/10 bg-glass p-5 text-muted-foreground">{providerName} direct insert is not configured in this deployment. You can still use .ics download or calendar feed.</p>;
     }
     if (error) return <p className="rounded-2xl border border-host-red/30 bg-host-red/10 p-5 font-semibold">{error}</p>;
-    if (!googleResult) {
-      return <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-glass p-5"><LoadingSpinner /> Adding matches to Google Calendar...</div>;
+    if (!calendarResult) {
+      return <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-glass p-5"><LoadingSpinner /> Adding matches to {providerName} Calendar...</div>;
     }
-    return <ResultSummary added={googleResult.added} skipped={googleResult.skipped} failed={googleResult.failed} />;
+    return <ResultSummary added={calendarResult.added} skipped={calendarResult.skipped} failed={calendarResult.failed} />;
   }
 
   if (method === "ics") {

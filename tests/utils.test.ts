@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { getAppBaseUrl } from "@/lib/utils";
+import { getAppBaseUrl, isMicrosoftConfigured } from "@/lib/utils";
 
 afterEach(() => {
   vi.unstubAllEnvs();
@@ -29,5 +29,12 @@ describe("getAppBaseUrl", () => {
     vi.stubEnv("APP_BASE_URL", "https://calendar.example.com");
 
     expect(getAppBaseUrl()).toBe("https://calendar.example.com");
+  });
+
+  it("detects complete Microsoft OAuth configuration", () => {
+    vi.stubEnv("MICROSOFT_CLIENT_ID", "client-id");
+    vi.stubEnv("MICROSOFT_CLIENT_SECRET", "client-secret");
+
+    expect(isMicrosoftConfigured()).toBe(true);
   });
 });

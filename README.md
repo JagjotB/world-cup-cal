@@ -2,7 +2,7 @@
 
 World Cup Calendar is an open-source calendar tool that lets fans add FIFA international fixtures, pre-tournament friendlies, and World Cup matches to Google Calendar, Apple Calendar, Outlook, and other calendar apps.
 
-Users can select all matches, specific teams, cities, or stadiums, then download an .ics file, subscribe to a live calendar feed, or connect Google Calendar for direct insertion.
+Users can select all matches, specific teams, cities, or stadiums, then download an .ics file, subscribe to a live calendar feed, or connect Google or Microsoft Calendar for direct insertion.
 
 ![MIT License](https://img.shields.io/badge/license-MIT-green)
 ![Next.js](https://img.shields.io/badge/Next.js-15-black)
@@ -21,7 +21,8 @@ Screenshots will be added after the first hosted release.
 - Generate .ics files
 - Generate live calendar feed URLs
 - Google Calendar direct insert
-- Duplicate detection for Google insert
+- Microsoft/Outlook Calendar direct insert
+- Duplicate detection for provider inserts
 - Mobile-friendly UI
 - Open-source and self-hostable
 
@@ -31,7 +32,7 @@ Screenshots will be added after the first hosted release.
 | --- | --- | --- | --- |
 | Google Calendar | Yes | Yes | Optional Google OAuth |
 | Apple Calendar | Yes | Yes | No public direct insert path |
-| Outlook Calendar | Yes | Yes | Phase 2 |
+| Outlook Calendar | Yes | Yes | Optional Microsoft OAuth |
 | Other apps | Yes | Yes | Provider dependent |
 
 ## Tech Stack
@@ -48,11 +49,11 @@ npm run db:seed
 npm run dev
 ```
 
-The app works without Google OAuth for .ics downloads and feed URLs. Google OAuth is only needed for direct insertion.
+The app works without provider OAuth for .ics downloads and feed URLs. Google and Microsoft OAuth are only needed for their direct insertion options.
 
 ## Environment Variables
 
-`DATABASE_URL` points Prisma at PostgreSQL. `NEXTAUTH_URL` and `NEXTAUTH_SECRET` are required for auth. `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` enable Google direct insert. `APP_BASE_URL` is used to generate public feed URLs. `FIXTURE_SOURCE_URL` points the refresh job at the World Cup schedule page. `FRIENDLIES_SOURCE_URL` points it at the international friendlies page. `CRON_SECRET` protects the refresh endpoint.
+`DATABASE_URL` points Prisma at PostgreSQL. `NEXTAUTH_URL` and `NEXTAUTH_SECRET` are required for auth. Google credentials enable Google direct insert. Microsoft credentials enable Outlook direct insert. `APP_BASE_URL` is used to generate public feed URLs. Fixture source variables configure the refresh job, and `CRON_SECRET` protects that endpoint.
 
 ## Database
 
@@ -92,13 +93,17 @@ Feeds return valid iCalendar content and use stable event UIDs.
 
 Google direct insert uses OAuth with `https://www.googleapis.com/auth/calendar.events.owned`, inserts into the user's primary calendar, and stores provider credentials plus event IDs for authenticated insertion and duplicate detection. Public Google OAuth apps may need Google verification before broad public use.
 
+## Microsoft Direct Insert
+
+Microsoft direct insert uses delegated `Calendars.ReadWrite` permission and Microsoft Graph `POST /me/events`. It supports personal Microsoft accounts and work or school accounts when the app registration uses the `common` tenant.
+
 ## Deployment
 
-Deploy on Vercel, connect a managed PostgreSQL database, configure environment variables, run `npm run db:deploy` and `npm run db:seed`, and add the production Google OAuth redirect URI.
+Deploy on Vercel, connect a managed PostgreSQL database, configure environment variables, run `npm run db:deploy` and `npm run db:seed`, and add the production OAuth redirect URIs.
 
 ## Privacy and Security
 
-No account is needed for .ics or feed use. Google credentials are stored server-side and are never exposed to the browser. See the in-app privacy policy for the complete disclosure.
+No account is needed for .ics or feed use. Provider credentials are stored server-side and are never exposed to the browser. See the in-app privacy policy for the complete disclosure.
 
 ## Known Limitations
 
@@ -106,7 +111,7 @@ The checked-in fixture baseline contains pre-tournament friendlies plus 104 Worl
 
 ## Roadmap
 
-Phase 1 is universal .ics/feed support and Google direct insert. Phase 2 adds Outlook direct insert through Microsoft OAuth and Graph.
+Future work includes event update/removal flows, additional fixture source adapters, and richer timezone metadata.
 
 ## Contributing
 

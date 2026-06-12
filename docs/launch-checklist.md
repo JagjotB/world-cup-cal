@@ -10,7 +10,9 @@
 - Test `.ics` download in Google, Apple, and Outlook.
 - Test feed subscription URLs on the deployed domain.
 - Confirm Google OAuth redirect URIs.
+- Confirm Microsoft OAuth redirect URIs and delegated `Calendars.ReadWrite` permission.
 - Confirm the Google consent screen links to the deployed privacy policy and terms.
+- Test Microsoft direct insert with both a personal account and a work or school account.
 - Confirm `.env` files are not committed.
 - Run `npm audit`.
 - Run `npm run lint`.

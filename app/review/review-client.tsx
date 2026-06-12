@@ -16,11 +16,13 @@ type Provider = "google" | "apple" | "outlook" | "other";
 export function ReviewClient({
   selection,
   appBaseUrl,
-  googleConfigured
+  googleConfigured,
+  microsoftConfigured
 }: {
   selection: SelectionInput;
   appBaseUrl: string;
   googleConfigured: boolean;
+  microsoftConfigured: boolean;
 }) {
   const [provider, setProvider] = useState<Provider>("google");
   const [loading, setLoading] = useState(false);
@@ -53,6 +55,11 @@ export function ReviewClient({
   async function directGoogleInsert() {
     if (!googleConfigured) return;
     await signIn("google", { callbackUrl: `/result?method=google&${query}` });
+  }
+
+  async function directMicrosoftInsert() {
+    if (!microsoftConfigured) return;
+    await signIn("azure-ad", { callbackUrl: `/result?method=microsoft&${query}` });
   }
 
   return (
@@ -133,11 +140,18 @@ export function ReviewClient({
         {provider === "outlook" && (
           <CalendarOptionCard
             title="Outlook direct insert"
-            label="Phase 2"
-            disabled
-            description="Direct Outlook insert is coming soon and will use Microsoft OAuth and Microsoft Graph."
+            label="Optional"
+            description="Direct Outlook insert adds selected matches through Microsoft Graph after you approve access."
+            disabled={!microsoftConfigured}
           >
-            <p className="text-sm font-semibold text-muted-foreground">Use the feed URL or .ics file for now.</p>
+            {microsoftConfigured ? (
+              <button type="button" onClick={directMicrosoftInsert} className="rounded-full bg-cta px-4 py-2 text-sm font-semibold text-gold-foreground shadow-glow">
+                Connect Microsoft Calendar
+              </button>
+            ) : (
+              <p className="text-sm font-semibold text-muted-foreground">Microsoft direct insert is not configured in this deployment. You can still use .ics download or calendar feed.</p>
+            )}
+            <p className="mt-3 text-xs leading-5 text-muted-foreground">Direct Microsoft insert requires permission to create the match events you choose in your default calendar.</p>
           </CalendarOptionCard>
         )}
       </div>
@@ -153,7 +167,7 @@ export function ReviewClient({
         />
         <InstructionSteps
           title="Outlook"
-          steps={["Import the .ics file.", "Or subscribe to the online iCal feed URL.", "Refresh timing depends on Outlook subscription behavior."]}
+          steps={["Use direct insert to add events immediately.", "Or import the .ics file.", "You can also subscribe to the live feed for automatic fixture updates."]}
         />
       </div>
     </section>

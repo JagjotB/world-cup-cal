@@ -2,7 +2,7 @@ import { ReviewClient } from "@/app/review/review-client";
 import { MatchCard } from "@/components/MatchCard";
 import { headers } from "next/headers";
 import { getRuntimeMatches } from "@/lib/fixtures";
-import { getAppBaseUrl, isGoogleConfigured } from "@/lib/utils";
+import { getAppBaseUrl, isGoogleConfigured, isMicrosoftConfigured } from "@/lib/utils";
 import { getSelectedMatches, normalizeSelection } from "@/lib/selection";
 import type { SelectionInput } from "@/lib/types";
 
@@ -50,7 +50,12 @@ export default async function ReviewPage({ searchParams }: { searchParams: Searc
         </div>
       </section>
 
-      <ReviewClient selection={selection} appBaseUrl={getAppBaseUrl(requestHeaders)} googleConfigured={isGoogleConfigured()} />
+      <ReviewClient
+        selection={selection}
+        appBaseUrl={getAppBaseUrl(requestHeaders)}
+        googleConfigured={isGoogleConfigured()}
+        microsoftConfigured={isMicrosoftConfigured()}
+      />
 
       <section>
         <h2 className="text-2xl font-bold">Selected matches</h2>

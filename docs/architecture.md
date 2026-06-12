@@ -11,12 +11,11 @@ Phase 1:
 - ICS file generation
 - Live iCalendar feed generation
 - Optional Google Calendar direct insert
-- Prisma duplicate tracking for Google inserts
+- Optional Microsoft Calendar direct insert through Microsoft Graph
+- Prisma duplicate tracking for provider inserts
 
 Phase 2:
 
-- Microsoft OAuth
-- Microsoft Graph calendar event creation
 - Additional fixture source adapters and integrity checks
 - Calendar update/remove tooling
 
